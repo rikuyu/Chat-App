@@ -101,7 +101,7 @@ body {
   font-weight: 300;
   font-size: 17px;
 }
-
+/* 
 #You {
   justify-content: flex-start;
 }
@@ -113,7 +113,7 @@ body {
 #Other .messageIndividual {
   background-color: #5ff064;
   color: black;
-}
+} */
 .messageIndividual {
   width: 200px;
   height: 60px;
@@ -126,4 +126,24 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   margin-right: 10px;
   margin-top: 20px;
+}
+
+.msg {
+  background-color: white;
+}
+
+.chatRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding-right: 0 !important;
+  background-color: white;
+}
+
+.chatReverse {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  padding-right: 0 !important;
+  background-color: white;
 }

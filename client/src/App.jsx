@@ -2,6 +2,29 @@ import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import "./App.css";
 
+import { makeStyles } from "@material-ui/core/styles";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import Divider from "@material-ui/core/Divider";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
+import Typography from "@material-ui/core/Typography";
+
+import Yuki from "./assets/profile.jpg";
+import Ami from "./assets/ami.jpg";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+    maxWidth: "36ch",
+    backgroundColor: theme.palette.background.paper,
+  },
+  inline: {
+    display: "inline",
+  },
+}));
+
 let socket;
 const CONNECTION_PORT = "localhost:3002/";
 
@@ -15,6 +38,8 @@ function App() {
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
 
+  const classes = useStyles();
+
   useEffect(() => {
     socket = io(CONNECTION_PORT);
   }, [CONNECTION_PORT]);
@@ -24,6 +49,7 @@ function App() {
       setMessageList([...messageList, data]);
     });
   });
+
   const connectToRoom = () => {
     setLoggedIn(true);
     socket.emit("join_room", room);
@@ -50,14 +76,14 @@ function App() {
           <div className="inputs">
             <input
               type="text"
-              placeholder="Name..."
+              placeholder="名前..."
               onChange={(e) => {
                 setUserName(e.target.value);
               }}
             />
             <input
               type="text"
-              placeholder="Room..."
+              placeholder="ルーム..."
               onChange={(e) => {
                 setRoom(e.target.value);
               }}
@@ -68,16 +94,33 @@ function App() {
       ) : (
         <div className="chatContainer">
           <div className="messages">
-            {messageList.map((val, key) => {
+            {messageList.map((val, index) => {
               return (
-                <div
-                  className="messageContainer"
-                  id={val.author == userName ? "You" : "Other"}
+                <List
+                  className={val.author == userName ? "chatRow" : "chatReverse"}
+                  key={index.toString()}
                 >
-                  <div className="messageIndividual">
-                    {val.author}: {val.message}
-                  </div>
-                </div>
+                  <ListItem alignItems="flex-start">
+                    <ListItemAvatar>
+                      <Avatar
+                        alt="profile-img"
+                        src={val.author == "ゆうき" ? Yuki : Ami}
+                      />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={val.author}
+                      secondary={
+                        <React.Fragment>
+                          <Typography
+                            className=""
+                            color="textPrimary"
+                          ></Typography>
+                          {val.message}
+                        </React.Fragment>
+                      }
+                    />
+                  </ListItem>
+                </List>
               );
             })}
           </div>
@@ -85,12 +128,12 @@ function App() {
           <div className="messageInputs">
             <input
               type="text"
-              placeholder="Message..."
+              placeholder="メッセージ..."
               onChange={(e) => {
                 setMessage(e.target.value);
               }}
             />
-            <button onClick={sendMessage}>Send</button>
+            <button onClick={sendMessage}>送信</button>
           </div>
         </div>
       )}
